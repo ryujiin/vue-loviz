@@ -13,6 +13,16 @@ lovizApiCartServices.getCartCookie = function (cookie) {
 }
 
 lovizApiCartServices.createCart = function () {
+	const token = localStorage.getItem('token');
+	if (token) {
+		lovizApiService.defaults({
+			post:{
+				headers:{
+					'Authorization':'JWT '+token
+				}
+			}
+		})
+	};
 	return lovizApiService.post('/api/carro/',{
 	})
 	.then(res => res.data)

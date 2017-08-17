@@ -60,8 +60,8 @@ const actions={
 				context.state.cartServer = res;
 			})	
 		};
-		
-	}
+	},
+	createCart(context){}
 }
 
 export default{
