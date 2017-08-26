@@ -19,7 +19,7 @@
 				lv-linea-cart
 				.cart-subtotal.texto-impacto
 					p Subtotal  S/.40.00
-					button.button.checkoutButton.is-black.texto-impacto Procesar Compra
+					button.button.checkoutButton.is-black.texto-impacto(@click="checkout") Procesar Compra
 
 
 </template>
@@ -36,7 +36,11 @@ export default {
 		...mapGetters(['getCartSlide','getCartNow']),
 	},
 	methods:{
-		...mapMutations(['ocultarCartSlide'])		
+		...mapMutations(['ocultarCartSlide']),
+		checkout(){
+			this.ocultarCartSlide()
+  			this.$router.push({name:'checkout'})
+		}
 	}
 }
 </script>

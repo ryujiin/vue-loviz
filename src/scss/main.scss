@@ -13,6 +13,9 @@ a{
 img{
 	width: 100%;
 }
+label{
+	font-weight: bold;
+}
 .move-enter-active, .move-leave-active{
 	transform : translateX(0);
 	transition: all .3s linear;
@@ -31,4 +34,19 @@ img{
 		letter-spacing: 1px;
 	}
 }
-
+.text-underline{
+	text-decoration: underline;
+}
+//.notification{
+	//padding: 5px;
+	//margin-bottom: 5px;
+	//font-size: 1px;
+	//visibility: hidden;
+	//opacity: 0;
+	//transition: all 0.5s linear;
+	//&.activo{
+		//font-size: 15px;
+		//visibility: visible;
+		//opacity: 1;
+	//}
+//}

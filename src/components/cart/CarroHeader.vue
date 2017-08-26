@@ -11,35 +11,28 @@ import lovizApiCartServices from '@/services/cart/cartService'
 
 export default {
 	computed:{
-  	...mapGetters(['getCarts','getCartNow','getuserPerfil'])
+  	...mapGetters(['getCartNow','getPerfil'])
 	},
   methods:{
     ...mapMutations(['assignarCart','mostrarCartSlide']),
-  	...mapActions(['updateLineas']),
-  	verificarUser(){
-  		if (getuserPerfil.id!==0) {
-        console.log('hay yser');
-      };
-  	}
+    ...mapActions(['updateServerCart']),
   },
   created() {
   	const carroCookie = this.$cookie.get('sesion_carro');
   	const self = this;
   	if (carroCookie) {
-  		lovizApiCartServices.getCartCookie(carroCookie)
+  		lovizApiCartServices.createCartCookie(carroCookie)
   		.then(res =>{
   			if (res.detail) {
   				this.$cookie.delete('sesion_carro');
   			}else{
-          self.assignarCart(res)
-  				self.updateLineas(res)
+          		self.assignarCart(res)
   			}
 	  	});
   	};
-
   },
   watch:{
-  	'getuserPerfil':'verificarUser'
+  	//'getCartNow.propietario':'updateServerCart'
   }
 }
 	

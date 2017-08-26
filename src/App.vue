@@ -14,6 +14,8 @@ import PmFooter from '@/components/layaout/Footer.vue'
 import LvHeader from '@/components/layaout/Header.vue'
 import LvCartSlide from '@/components/layaout/CartSlide.vue'
 
+import lovizApiCmsService from '@/services/lovizcms'
+
 import {mapGetters,mapMutations} from 'vuex'
 
 export default {
@@ -26,6 +28,13 @@ export default {
   },
   methods:{
     ...mapMutations(['ocultarCartSlide'])
+  },
+  created(){
+    lovizApiCmsService.getCrsfToken()
+    .then(res =>{
+      localStorage.setItem('csrf',res);      
+      this.$cookie.set('csrftoken',res);     
+    })
   }
 }
 </script>

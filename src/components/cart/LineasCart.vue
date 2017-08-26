@@ -1,6 +1,6 @@
 <template lang="pug">
-div(v-if="getLineas")
-	.lista-cart(v-for="linea in getLineas")
+div(v-if="getCartNow")
+	.lista-cart(v-for="linea in getCartNow.lineas")
 		.img_linea
 			img(:src="linea.thum")
 		.descripcion_linea.texto-impacto
@@ -16,19 +16,25 @@ div(v-if="getLineas")
 <script>
 
 import {mapGetters, mapActions } from 'vuex'
-import lovizApiCartServices from '@/services/cart/cartService'
+import lovizApiLineaServices from '@/services/cart/LineService'
 
 
 export default {
 	computed:{
-		...mapGetters(['getLineas'])
+		...mapGetters(['getCartNow']),
+		getlineas(){
+			if (getCartNow.lineas) {
+				return true
+			}else{
+				return false
+			}
+		}
 	},
 	methods:{
-		...mapActions(['updateLineas','updateCart']),
+		...mapActions(['updateCart']),
 		removeLinea(linea){
-			lovizApiCartServices.deleteLinea(linea)
+			lovizApiLineaServices.deleteLinea(linea)
 			.then(res =>{
-				this.updateLineas();
 				this.updateCart();
 			})
 		}

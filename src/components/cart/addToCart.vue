@@ -12,11 +12,12 @@
 
 import {mapGetters,mapMutations,mapActions} from 'vuex'
 import lovizApiCartServices from '@/services/cart/cartService'
+import lovizApiLineaServices from '@/services/cart/LineService'
 
 
 export default {
 		computed:{
-			...mapGetters(['getCartNow','getproductoActual','getCartSpiner','getTallaSeleccionada'])
+			...mapGetters(['getCartNow','getproductoActual','getCartSpiner','getTallaSeleccionada','getPerfil'])
 		},
 		methods:{
 			...mapMutations(['assignarCart','mostrarcartSpiner','mostrarCartSlide','selecionTalla']),
@@ -39,10 +40,9 @@ export default {
 						variacion:this.getTallaSeleccionada.id,
 						cantidad:1,
 					}
-					lovizApiCartServices.addLineaCart(linea_actual)
+					lovizApiLineaServices.addLineaCart(linea_actual)
 					.then(res =>{
 						this.$store.dispatch('updateCart');
-						this.$store.dispatch('updateLineas');
 						this.$store.commit('mostrarCartSlide');
 						this.$store.commit('selecionTalla',{});
 			  	});
@@ -52,11 +52,10 @@ export default {
 				}
 			},
 			create_cart(){
-				const self = this;
 				lovizApiCartServices.createCart()
 				.then(res =>{
 					//Coloco el Cookie de la sesion
-					self.$cookie.set('sesion_carro',res.sesion_carro,{ expires: '7d' });
+					this.$cookie.set('sesion_carro',res.sesion_carro,{ expires: '7d' });
 					this.assignarCart(res);
 					this.addToCart();
 	  		})				

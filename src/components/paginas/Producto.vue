@@ -112,7 +112,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main-content{
 	padding-top: 80px;
 	background-color: #fff

@@ -2,7 +2,17 @@ import lovizApiService from './../lovizapi'
 
 const lovizApiCartServices = {}
 
-lovizApiCartServices.getCartCookie = function (cookie) {
+//Url para crear o obtener carrito por primera vez
+lovizApiCartServices.createCart = function (carroObject) {
+	return lovizApiService.post('/api/carro/',{
+		params:carroObject
+	})
+	.then(res => res.data)
+	.catch(err => err.data);
+}
+
+
+lovizApiCartServices.createCartCookie = function (cookie) {
 	return lovizApiService.get('/api/carro/',{
 		params:{
 			session:cookie
@@ -12,64 +22,52 @@ lovizApiCartServices.getCartCookie = function (cookie) {
 	.catch(err => err.data);
 }
 
-lovizApiCartServices.createCart = function () {
+lovizApiCartServices.BuscarCartlogin = function () {
 	const token = localStorage.getItem('token');
-	if (token) {
-		lovizApiService.defaults({
-			post:{
-				headers:{
-					'Authorization':'JWT '+token
-				}
-			}
-		})
-	};
-	return lovizApiService.post('/api/carro/',{
+
+	return lovizApiService.get('/api/carro/',{
+		headers:{
+			'Authorization':'JWT '+ token
+		}
 	})
 	.then(res => res.data)
-	.catch(err => err.data)
+	.catch(err => err.data);
 }
 
-lovizApiCartServices.getCartServer = function (carro) {
+//Url para cuando ya tengo la ID del carro  Actualizarlo 
+function getAutorizacion () {
 	const token = localStorage.getItem('token');
-	if (!carro) {
-		carro = 0
-	};
-	return lovizApiService.get('/api/carro/',{
-		params:{
-			carro_fronted:carro
-		},
-		headers:{
+	let autorizacion={}
+	if (token) {
+		autorizacion = {
 			'Authorization':'JWT '+token
 		}
-	})
+	};
+	return autorizacion
 }
-
-lovizApiCartServices.updateCart = function (id) {
-	return lovizApiService.get(`/api/carro/${id}/`)
+lovizApiCartServices.getCartServer = function (id) {
+	const auth = getAutorizacion();
+	
+	return lovizApiService.get(`/api/carro/${id}/`,{
+		headers:auth
+	})
 	.then(res => res.data)
 	.catch(err => err.data);
 }
 
-lovizApiCartServices.updateLineas = function (id) {
-	return lovizApiService.get('/api/carro/lineas/',{
-		params:{
-			carro:id
+lovizApiCartServices.editarCartServer = function (carroObject) {
+	const token = localStorage.getItem('token');
+	console.log(carroObject)
+	if (!carroObject.propietario) {
+		return
+	};
+	return lovizApiService.put(`/api/carro/${carroObject.id}/`,carroObject, {
+		headers:{
+			'Authorization':'JWT '+ token
 		}
 	})
 	.then(res => res.data)
 	.catch(err => err.data);
-}
-
-lovizApiCartServices.addLineaCart = function (linea) {
-	return lovizApiService.post('/api/carro/lineas/',linea)
-	.then(res => res.data)
-	.catch(err => err.data)	
-}
-
-lovizApiCartServices.deleteLinea = function (linea) {
-	return lovizApiService.delete(`/api/carro/lineas/${linea}/`)
-	.then(res => res.data)
-	.catch(err => err.data)	
 }
 
 export default lovizApiCartServices

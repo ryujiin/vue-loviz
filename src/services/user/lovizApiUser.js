@@ -21,4 +21,16 @@ lovizApiUserService.getPerfil = function (token) {
 	.catch(err => err.data)
 }
 
+lovizApiUserService.crearDireccion = function (direccion) {
+	const token = localStorage.getItem('token');
+
+	return lovizApiService.post('/api/cliente/direcciones/',direccion,{
+		headers:{
+			'Authorization':'JWT '+token
+		}
+	})
+	.then(res => res.data)
+	.catch(err => err.data)
+}
+
 export default lovizApiUserService

@@ -59,7 +59,7 @@ export default {
 	position: fixed;
 	height: 70px;
 	width: 100%;
-	z-index: 100;
+	z-index: 9;
 	&.activo{
 		background-color: #fff;
 	}
