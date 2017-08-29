@@ -1,7 +1,7 @@
 <template lang="pug">
 	.header-cart(@click="mostrarCartSlide")
 		span.icon-shopping_cart
-		.num-cart.is-primary.texto-impacto.texto-2 {{getCartNow.num_lineas}}
+		.num-cart.texto-impacto.texto-2 {{getCartNow.num_lineas}}
 </template>
 
 <script>
@@ -40,7 +40,6 @@ export default {
 
 <style lang="scss" scoped>
 .header-cart{
-	color: #111;
 	font-size: 1.2em;
 	position: relative;
 	.num-cart{

@@ -33,13 +33,17 @@ export default {
 		LvLineaCart
   },
 	computed:{
-		...mapGetters(['getCartSlide','getCartNow']),
+		...mapGetters(['getCartSlide','getCartNow','getPerfil']),
 	},
 	methods:{
-		...mapMutations(['ocultarCartSlide']),
+		...mapMutations(['ocultarCartSlide','changeLoginModal']),
 		checkout(){
 			this.ocultarCartSlide()
-  			this.$router.push({name:'checkout'})
+			if (this.getPerfil.id) {
+  				this.$router.push({name:'checkout'})
+			}else{
+				this.changeLoginModal(true);
+			}
 		}
 	}
 }

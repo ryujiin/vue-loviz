@@ -1,10 +1,12 @@
 <template lang="pug">
   #app
+    vue-progress-bar
     lv-cart-slide
     .contenido(:class="{ cartSlideActivo: getCartSlide }")
       .bg_cartSlide(@click="ocultarCartSlide")
       lv-header
-      router-view
+      transition(name="fade" mode="out-in")
+        router-view
       pm-footer  
 </template>
 
@@ -27,14 +29,26 @@ export default {
     ...mapGetters(['getCartSlide'])
   },
   methods:{
-    ...mapMutations(['ocultarCartSlide'])
+    ...mapMutations(['ocultarCartSlide','changeCssHome']),
+    crearTokeUser(){
+      if (localStorage.getItem('token')) {
+        this.$store.commit('setUserToken',localStorage.getItem('token'));     
+      };
+    },
+    ishome(){
+      if (this.$route.name === 'home') {
+        this.changeCssHome(true)
+      }else{
+        this.changeCssHome(false)
+      }
+    }
   },
-  created(){
-    lovizApiCmsService.getCrsfToken()
-    .then(res =>{
-      localStorage.setItem('csrf',res);      
-      this.$cookie.set('csrftoken',res);     
-    })
+  mounted(){
+    this.crearTokeUser();
+    this.ishome();
+  },
+  watch:{
+    '$route':'ishome'
   }
 }
 </script>
@@ -43,9 +57,6 @@ export default {
   @import './scss/main.scss';
   .resultados{
     margin-top: 10px;
-  }
-  .is-active{
-    border: 3px #23d160 solid
   }
   .contenido{
     transition: all .5s;
@@ -69,5 +80,4 @@ export default {
       position: fixed;
     }
   }
-  
 </style>

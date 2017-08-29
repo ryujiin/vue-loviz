@@ -11,6 +11,9 @@ const state = {
 		personal:false,
 		ordenes:false,
 		devoluciones:false,
+	},
+	login:{
+		isModal:false,
 	}
 }
 
@@ -35,12 +38,16 @@ const mutations = {
    			}
 		}
    	},
+   	changeLoginModal(state,valor){
+   		state.login.isModal=valor
+   	}
 }
 
 const getters={
 	getToken: state => state.userToken,
 	getPerfil: state => state.userPerfil,
 	getUserTabs: state => state.pageTabs,
+	getUserLogin: state => state.login,
 }
 
 const actions={
@@ -71,6 +78,7 @@ const actions={
 		})
 		return promise
 	},
+	
 }
 
 export default{

@@ -3,7 +3,7 @@ import lovizApiService from './lovizapi'
 const lovizProductosService = {}
 
 lovizProductosService.getListaProductos = function (q) {
-	return lovizApiService.get('/api/lista_productos/',{
+	return lovizApiService.get('/api/productos/',{
 		params:q
 	})
 	.then(res => res.data)

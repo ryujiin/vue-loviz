@@ -21,6 +21,12 @@ lovizApiUserService.getPerfil = function (token) {
 	.catch(err => err.data)
 }
 
+lovizApiUserService.crearUser = function (cuenta) {
+	return lovizApiService.post('/ajax/crear/',cuenta)
+	.then(res => res.data)
+	.catch(err => err.data)
+}
+
 lovizApiUserService.crearDireccion = function (direccion) {
 	const token = localStorage.getItem('token');
 

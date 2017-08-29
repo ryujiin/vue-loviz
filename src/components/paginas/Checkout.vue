@@ -6,7 +6,8 @@
 				.column.is-8
 					p Si tienes cualquier problema porfavor contactanos a nuestro soporte
 				.column.is-4.has-text-right
-					span.icon-mobile 986-960-767
+					span.icon-mobile
+					span.text-impacto 986-960-767
 				.column.is-7
 					.contendio-general.box.cuenta
 						.titulo Datos de la Cuenta
@@ -28,7 +29,7 @@
 							span Envio
 							span.is-pulled-right S/.{{getCartNow.envio}}
 						.total.celda
-							label Total
+							span Total
 							span.is-pulled-right S/. {{getCartNow.total}}
 </template>
 
@@ -53,7 +54,7 @@ export default {
 		...mapGetters(['getCartNow','getPerfil','getPedido']),
 	},
 	methods:{
-		...mapActions(['buscarPedido']),
+		...mapActions(['buscarPedido','updateCart']),
 		...mapMutations(['asiganrDireccion']),
 		activarModalDireccion(){
 			this.direcionModal = true;
@@ -65,11 +66,11 @@ export default {
 		    this.buscarPedido(this.getCartNow.pedido);
 		  };	
 		}else{
-  		this.$router.push({name:'home'})			
-		}
-	  
+	  		this.$router.push({name:'home'})			
+		}	  
 	},
 	watch:{
+		'getPedido':'updateCart'
 	}
 }
 </script>
