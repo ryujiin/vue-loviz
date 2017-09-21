@@ -1,8 +1,6 @@
 <template lang="pug">
 .uploadImages
-  // UPLOAD
   form(enctype='multipart/form-data', novalidate='', v-if='isInitial || isSaving')
-    h1 Upload images
     .dropbox
       input.input-file(type='file', multiple='', :name='uploadFieldName', :disabled='isSaving', @change='filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length', accept='image/*')
       p(v-if='isInitial')
@@ -36,6 +34,7 @@
   
   const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
   export default {
+    props:['comentario'],
     data() {
       return {
         uploadedFiles: [],
@@ -71,9 +70,8 @@
         
         upload(formData)
           .then(x => {
-            console.log(x)
-            this.uploadedFiles = [].concat(x);
-            this.currentStatus = STATUS_SUCCESS;
+            this.uploadedFiles.push(x);
+            //this.currentStatus = STATUS_SUCCESS;
           })
           .catch(err => {
             console.log(err);
@@ -83,15 +81,24 @@
       },
       filesChange(fieldName, fileList) {
         // handle file changes
-        const formData = new FormData();
+        var formData = new FormData();
+        var i;
         if (!fileList.length) return;
+
         // append the files to FormData
-        Array
-          .from(Array(fileList.length).keys())
-          .map(x => {            
-            formData.append(fieldName, fileList[x], fileList[x].name);
-            this.save(formData)
-          });
+        for(i=0;i<fileList.length;i++){
+          formData.append('comentario', this.comentario.id);
+          formData.append(fieldName, fileList[i], fileList[i].name);
+          this.save(formData)
+        }
+        //Array
+          //.from(Array(fileList.length).keys())
+          //.map(x => {            
+            //console.log(this.comentario.id)
+            //formData.append('comentario', this.comentario.id);
+            //formData.append(fieldName, fileList[x], fileList[x].name);
+            //this.save(formData)
+          //});
         // save it
         //this.save(formData);
       }

@@ -8,34 +8,37 @@
 			.column.is-4
 				lv-promedio(:comentarios="comentarios" :producto="producto")
 			.column.is-8
-				.columns.is-multiline
-					.column.is-6(v-for="coment in comentarios")
-						.card
-							.card-image(v-if="coment.imagenes")
-								figure.image.is-4by3
-									img(src='http://bulma.io/images/placeholders/1280x960.png', alt='Placeholder image')
-							.card-content
-								.media
-									.media-left
-										figure.image.is-48x48
-											img(src='http://bulma.io/images/placeholders/96x96.png', alt='Imagen de Perfil')
-									.media-content
-										p.title.is-4 {{coment.nombre}}
-										p.subtitle.is-6
-											span.icon-star-full.has-text-warning(v-for="s in coment.valoracion")
-								.content
-									p {{coment.comentario}}
-									p.redes-sociales(v-if="redes")
-										a @lovizDC
-										| .
-										a(href='#') #cute
-										a(href='#') #evangelion
-									br
-									time(datetime='2016-1-1') Hace {{coment.creado}}
+				carousel(:perPage="2")
+					slide(v-for="coment in comentarios" v-if="coment.comentario" :key="coment.id")
+						.column
+							.card
+								.card-image(v-if="coment.fotos_comentario.length>0")
+									figure.image.is-4by3
+										img(v-for="img in coment.fotos_comentario" :src="img.foto")
+								.card-content
+									.media
+										.media-left
+											figure.image.is-48x48
+												img(src='http://bulma.io/images/placeholders/96x96.png', alt='Imagen de Perfil')
+										.media-content
+											p.title.is-4 {{coment.nombre}}
+											p.subtitle.is-6
+												span.icon-star-full.has-text-warning(v-for="s in coment.valoracion")
+									.content
+										p {{coment.comentario}}
+										p.redes-sociales(v-if="redes")
+											a @lovizDC
+											| .
+											a(href='#') #cute
+											a(href='#') #evangelion
+										br
+										time(datetime='2016-1-1') Hace {{coment.creado}}
 </template>
 
 <script>
 import {mapMutations} from 'vuex'
+
+import { Carousel, Slide } from 'vue-carousel';
 
 import lovizProductosService from '@/services/lovizapiProductos'
 
@@ -44,7 +47,7 @@ import lvPromedio from '@/components/paginas/producto/comentarios/promedio.vue'
 
 export default {
 	components:{
-		lvPromedio
+		lvPromedio,Carousel,Slide
 	},
 	props: [
 		'producto'

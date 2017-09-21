@@ -3,7 +3,7 @@
 	.backgroundOver(@click="zoomImage(false)")
 	.imagen-mostrar(@click="zoomImage(true)")
 		img(:src="primera_imagen")
-	.imagen-zoom(:style="estilo_img" v-on:mousemove="moverBG")
+	.imagen-zoom(:style="estilo_img" v-on:mousemove="moverBG" @click="zoomImage(false)")
 </template>
 
 <script>
@@ -68,7 +68,6 @@ export default {
 		height: 90%;
 		border-radius: 10px;
 		background-color: #fff;
-		overflow: hidden;
 		box-shadow: 1px 0px 25px rgba(0,0,0,0.2);
 		.imagen-mostrar{
 			display: none;
@@ -78,6 +77,7 @@ export default {
 			width:100%;
 			height: 100%;
 			position: absolute;
+			border-radius: 10px;
 		}
 		.backgroundOver{
 			position: fixed;

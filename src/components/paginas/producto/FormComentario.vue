@@ -7,7 +7,7 @@
 				figure
 					img(:src='producto.thum')
 				.nombre {{producto.full_name}}
-			form.formulario(v-on:submit.prevent="onSubmit" enctype="multipart/form-data")
+			.formulario
 				h3.titulo Mi Comentario
 				transition(name="fade" mode="out-in")
 					.felicitaciones.has-text-centered(v-if="todoOk" key="is-ok")
@@ -26,11 +26,11 @@
 									p.control(v-for="s in star")
 										a.button.is-medium(@mouseover="starOver(s.valor,s.texto)" 
 																@mouseleave="starLeave"
-																@click="valorar(s.valor)"
+																@click="valorar(s.valor,s.texto)"
 																:class="{'over': diseno.valor>=s.valor,'activo': calificacion>=s.valor}")
 											span.icon.is-small
 												i.icon-star-full
-									p.texto {{diseno.texto}}
+									p.texto {{text_estrella}}
 							.requerido.has-text-danger(v-if="this.enviado && this.calificacion <= 0")
 								span.icon-x
 								span Requerido
@@ -43,7 +43,8 @@
 								textarea.textarea(placeholder='Ejemplo: Compré este hace un mes y estoy muy contento de haberlo hecho ...' 
 																	v-model="body" rows=2 
 																	:class="{'is-danger': formError.body}"  @keyup="veriBody")
-								lv-form-upload-image
+								transition(name="fade")
+									lv-form-upload-image(v-if="calificacion" :comentario="comentario")
 						.campo.columns.is-multiline(v-if="getPerfil.id==0")
 							.column.is-6
 								.field
@@ -77,7 +78,7 @@
 										p.help.is-danger {{formError.email}}			
 						p.small Puede recibir mensajes de correo electrónico con respecto a esta presentación. Cualquier correo electrónico incluirán la posibilidad de darse de baja de futuras comunicaciones.
 						p.has-text-centered
-							button.button.is-black
+							button.button.is-black(@click="onSubmit")
 								.loader(v-if="enviando")
 								span Enviar Comentario
 </template>
@@ -95,7 +96,9 @@ export default {
   props: ['producto'],
   data() {
 		return {
+			comentario:{},
 			calificacion:0,
+			texto_calificacion:'',
 			body:'',
 			email:'',
 			nombre:'',
@@ -140,6 +143,15 @@ export default {
 				}
 			}
 			return false
+		},
+		text_estrella(){
+			if (this.diseno.texto) {
+				return this.diseno.texto
+			};
+			if (this.texto_calificacion) {
+				return this.texto_calificacion
+			};
+			return ''
 		}
 	},
 	methods:{
@@ -161,8 +173,13 @@ export default {
 		starLeave(){
 			this.diseno = {texto:'',valor:null}
 		},
-		valorar(valor){
-			this.calificacion = valor
+
+		valorar(valor,texto){
+			this.calificacion = valor;
+			this.texto_calificacion = texto;
+			if (!this.comentario.id) {
+				this.crearComentario();
+			};
 		},
 		veriApellido(){
 			if (this.apellido.length>1) {
@@ -185,8 +202,19 @@ export default {
 				this.formError.email = ''
 			}
 		},
+		crearComentario(){
+			const coment = {
+				valoracion : this.calificacion,
+				producto: this.producto.id,
+			}
+			lovizApiProducto.createComentarioProducto(coment)
+			.then(res =>{
+				this.comentario = res;
+	  	});
+		},
 		enviarServer(){
 			const coment = {
+				id:this.comentario.id,
 				valoracion : this.calificacion,
 				comentario : this.body,
 				producto: this.producto.id,
@@ -195,14 +223,11 @@ export default {
 				full_name_invitado: this.nombre,
 				apellido_invitado	: this.apellido
 			}
-
-			lovizApiProducto.createComentarioProducto(coment)
+			lovizApiProducto.updateComentarioProducto(coment)
 			.then(res =>{
-				console.log(res)
 				this.enviando = false;
 				this.todoOk = true;
 	  	});
-
 		},
 		selectRecomendado(valor){
 			this.recomendado = valor
@@ -231,20 +256,6 @@ export default {
 				};
 			};			
 			return veri
-		},
-		onChangeImage(e){
-			const formData = new FormData();
-
-			var files = e.target.files || e.dataTransfer.files;
-			if (!files.length) return;
-
-			 // append the files to FormData
-       Array
-         .from(Array(files.length).keys())
-         .map(x => {
-           console.log(files[x]);
-         });
-
 		}
 	},
 	watch:{

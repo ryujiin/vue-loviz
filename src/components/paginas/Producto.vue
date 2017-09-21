@@ -60,7 +60,8 @@
 			.productos
 				carousel(:perPage="4" :paginationEnabled="false")
 					slide(v-for="p in productos" :key="p.slug")
-						lv-producto-lista(:producto="p")
+						.column
+							lv-producto-lista(:producto="p")
 		lv-section-review(:producto="getproductoActual")
 </template>
 
