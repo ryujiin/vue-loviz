@@ -4,6 +4,13 @@ const state = {
 	productoActual: {},
 	productos:[],
 	tallaSelecionada:{},
+	formComent:false,
+}
+
+const getters={
+	getproductoActual: state => state.productoActual,
+	getTallaSeleccionada: state => state.tallaSelecionada,
+	getFormComent: state => state.formComent,
 }
 
 const mutations = {
@@ -18,16 +25,18 @@ const mutations = {
 	},
 	selecionTalla(state,talla){
 		state.tallaSelecionada=talla
+	},
+	verComentario(state,valor){
+		state.formComent=valor;
 	}
 }
 
-const getters={
-	getproductoActual: state => state.productoActual,
-	getTallaSeleccionada: state => state.tallaSelecionada,
+const actions= {
 }
 
 export default{
 	state,
 	mutations,
 	getters,
+	actions,
 }

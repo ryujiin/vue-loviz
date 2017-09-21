@@ -1,17 +1,14 @@
 <template lang="pug">
 	section.main-content
 		.container.productoSingle(v-if="getproductoActual")
-			.columns
+			.columns.is-multiline
 				.column.is-8.imagen-producto
 					.galeria-full
 						.thums
 							ul
 								li(v-for="img in getproductoActual.imagenes_producto")
 									img(:src="img.imagen_thum",@click="cambiarImagen(img.orden)")
-						.imagen-full
-							.imagen-mostrar
-								img(:src="this.imagenSelecionada", v-if="this.imagenSelecionada")
-								img(:src="primera_imagen",v-else)
+						lv-zoom-producto(:primera_imagen="primera_imagen")
 				.column.is-4.producto
 					.producto-name
 						span.texto-impacto.texto-2 Hombre
@@ -26,12 +23,12 @@
 					.producto-review
 						.producto-estrellas.has-text-primary
 							span(v-for="star in this.stars")
-								i.icon-heart(v-if="star<=getproductoActual.sort_valoracion")
-								i.icon-heart-outlined(v-else)
-						.producto-leer-escribir
+								i.icon-star-full(v-if="star<=getproductoActual.sort_valoracion")
+								i.icon-star-empty(v-else)
+						.producto-leer-escribir(@click="verComentario(true)")
 							span.ratio {{getproductoActual.valoracion}}
 							span.num-coments ({{getproductoActual.num_comentarios}})
-							span.texto-impacto.texto-2 Escribe un Comentario
+							span.texto-impacto.texto-2 Danos tu Opinion
 					.producto-variaciones
 						.variacion-seleccion
 							.titulo-seleccion.texto-impacto.texto-2 Seleccionado:
@@ -54,65 +51,105 @@
 									@click="selecionTalla(varia)",
 									:class="{'activo' : getTallaSeleccionada == varia}") {{varia.talla}}
 					lv-add-to-cart
-
+				.column.is-12.datos
+					lv-coment(:producto="getproductoActual")
+		.productos-more
+			.titulo.has-text-centered
+				small Otros Productos
+				h1 Que Tambien te Gustara
+			.productos
+				carousel(:perPage="4" :paginationEnabled="false")
+					slide(v-for="p in productos" :key="p.slug")
+						lv-producto-lista(:producto="p")
+		lv-section-review(:producto="getproductoActual")
 </template>
 
 <script>
-import {mapGetters,mapState,mapMutations} from 'vuex'
 
-import lovizProductoService from '@/services/lovizapiProductos'
+import {mapGetters,mapState,mapMutations} from 'vuex'
+import { Carousel, Slide } from 'vue-carousel';
+
+import lovizProductosService from '@/services/lovizapiProductos'
+
 import lvAddToCart from '@/components/cart/addToCart.vue'
+import lvZoomProducto from '@/components/paginas/producto/zoomProducto.vue'
+import lvComent from '@/components/paginas/producto/FormComentario.vue'
+import LvProductoLista from '@/components/paginas/catalogo/ProductoLista.vue'
+import lvSectionReview from '@/components/paginas/producto/sectionReview.vue'
+
 
 export default {
 		data: function () {
-		  return {
+			return {
 				productoSlug:'',
 				stars :[1,2,3,4,5],
 				imagenSelecionada:'',
-		  }
+				zoom:false,
+				productos:{},
+			}
 		},
 		components:{
-			lvAddToCart
-	  },
-  	created(){
-  		this.changeProductoSlug(this.$route.params.slug);
-  	},
-  	computed:{
-  		...mapGetters(['getproductoActual','getTallaSeleccionada']),
-  		primera_imagen(){
-  			if (!this.getproductoActual.id) {
-  				return
-  			};
-  			return this.getproductoActual.imagenes_producto[0].imagen
-  		}
-  	},
-  	methods:{
-  		...mapMutations(['buscarProducto','selecionTalla','cambiarImagen']),
-  		changeProductoSlug(){
-  			this.tallaSeleccionada = {};
-  			this.imagenSelecionada = '';
+			lvAddToCart,lvZoomProducto,lvComent,LvProductoLista,Carousel,Slide,lvSectionReview
+		},
+		created(){
+			this.changeProductoSlug(this.$route.params.slug);
+		},
+		computed:{
+			...mapGetters(['getproductoActual','getTallaSeleccionada','getFormComent']),
+			primera_imagen(){
+				if (!this.getproductoActual.id) {
+					return
+				};
+				if (this.imagenSelecionada!=='') {
+					return this.imagenSelecionada
+				}else{
+					return this.getproductoActual.imagenes_producto[0].imagen
+				}
+			},
+			estilo_img(){
+				return {
+					backgroundImage:`url(${this.primera_imagen})`
+				}
+			}
+		},
+		methods:{
+			...mapMutations(['buscarProducto','selecionTalla','cambiarImagen','verComentario']),
+			changeProductoSlug(){
+				this.tallaSeleccionada = {};
+				this.imagenSelecionada = '';
 				this.productoSlug = this.$route.params.slug;
 			},
 			buscarProductoSlug(){
 				this.buscarProducto(this.productoSlug)
+				lovizProductosService.getListaProductos({categoria:'mujer'})
+				.then(res =>{
+					this.productos = res
+				});
 			},
 			cambiarImagen(orden){
-		  	const self = this;
-		  	this.getproductoActual.imagenes_producto.forEach(function (valor) {
-		  		if (valor.orden===orden) {
-		  			self.imagenSelecionada = valor.imagen
-		  		};
-		  	})
+				const self = this;
+				this.getproductoActual.imagenes_producto.forEach(function (valor) {
+					if (valor.orden===orden) {
+						self.imagenSelecionada = valor.imagen
+					};
+				})
 			},
-  	},
-  	watch:{
-  		'$route':'changeProductoSlug',
-  		'productoSlug':'buscarProductoSlug',
-  	}
+		},
+		watch:{
+			'$route':'changeProductoSlug',
+			'productoSlug':'buscarProductoSlug',
+		}
 }
 </script>
 
 <style lang="scss" scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0
+}
+
 .main-content{
 	padding-top: 80px;
 	background-color: #fff
@@ -155,6 +192,11 @@ export default {
 		.texto-impacto.texto-2{
 			cursor: pointer;
 			text-decoration: underline;
+		}
+		.modal{
+			.modal-content{
+				background-color: #fff;
+			}
 		}
 	}
 	.producto-variaciones{
@@ -213,10 +255,6 @@ export default {
 				}
 			}
 		}
-	}
-	.imagen-full{
-		width: 88%;
-		display: inline-block;
 	}
 }
 </style>

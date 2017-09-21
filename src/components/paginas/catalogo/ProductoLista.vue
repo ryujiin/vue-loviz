@@ -8,8 +8,8 @@
 			p.producto-nombre
 				.estrellas.has-text-primary
 					span(v-for="star in this.stars")
-								i.icon-heart(v-if="star<=producto.sort_valoracion")
-								i.icon-heart-outlined(v-else)
+								i.icon-star-full(v-if="star<=producto.sort_valoracion")
+								i.icon-star-empty(v-else)
 				span {{producto.nombre}}				
 		.producto-precio.has-text-centered
 			span.precio-old.precio.has-text-danger(v-if="producto.en_oferta") S/. {{producto.precio}}

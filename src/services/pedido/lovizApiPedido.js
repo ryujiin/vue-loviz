@@ -22,14 +22,34 @@ lovizApiPedidoService.editarPedido = function (pedido) {
 	.then(res => res.data)
 	.catch(err => err.data);	
 }
+lovizApiPedidoService.pedidoActual = function (pedido) {
+	return lovizApiService.get('/api/pedido/actual/',{
+		params:{
+			pedido:pedido
+		}
+	})
+	.then(res => res.data)
+	.catch(err => err.data);	
+}
+
 //Pago Stripe
 lovizApiPedidoService.pagoStripe = function (pago) {
-	const token = localStorage.getItem('token');
-
 	return lovizApiService.post('/pago/stripe/',{
 		carro:pago.carro,
 		stripeToken:pago.stripeToken
 	},)
+	.then(res => res.data)
+	.catch(err => err.data);	
+}
+
+//pago Paypal
+lovizApiPedidoService.getpagoPaypal = function (pedido) {
+	return lovizApiService.get('/pago/paypal/',{
+		params:{
+			carro:pedido.carro,
+			pedido:pedido.pedido,
+		}
+	})
 	.then(res => res.data)
 	.catch(err => err.data);	
 }

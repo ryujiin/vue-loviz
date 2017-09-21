@@ -18,6 +18,36 @@ lovizProductosService.getProductoSlug = function (q) {
 	})
 	.then(res => res.data)
 }
+
+lovizProductosService.getComentarioProducto = function (p) {
+	return lovizApiService.get('/api/comentarios/',{
+		params:{
+			producto:p
+		}
+	})
+	.then(res => res.data)
+	.catch(err => err.data);
+}
+
+lovizProductosService.createComentarioImagen = function (imagenes) {
+	return lovizApiService.post('/api/comentarioimgs/',imagenes,{
+		headers:{
+			'Content-Type': 'multipart/form-data'
+		}
+	})
+	.then(res => res.data)
+	.catch(err => err.data);
+}
+
+lovizProductosService.createComentarioProducto = function (comentario) {
+	const token = localStorage.getItem('token');	
+
+	return lovizApiService.post('/api/comentarios/',comentario)
+	.then(res => res.data)
+	.catch(err => err.data);
+}
+
+
 //trackService.getByid = function (id) {
 	//return platziMusicService.get(`/tracks/${id}`)
 	//.then(res => res.data)

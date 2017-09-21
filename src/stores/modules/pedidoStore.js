@@ -4,6 +4,9 @@ const state = {
 	pedido:{
 		direccion_envio:null
 	},
+	desing:{
+		procesando:false,
+	}
 }
 
 const mutations = {
@@ -13,10 +16,14 @@ const mutations = {
 	asiganrDireccion(state,direccion){
 		state.pedido.direccion_envio = direccion
 	},
+	changePedidoProcesando(state,valor){
+		state.desing.procesando=valor
+	}
 }
 
 const getters={
 	getPedido: state => state.pedido,	
+	getPedidoDesing: state => state.desing,	
 }
 
 const actions={

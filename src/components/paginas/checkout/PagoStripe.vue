@@ -12,7 +12,7 @@
 			label
 				span Tarjeta
 				#card-element.field
-		button.button.is-primary(type="submit") Pagar  S/. {{getCartNow.total}}
+		button.button.is-primary(type="submit" :disabled="enviandose") Pagar  S/. {{getCartNow.total}}
 		.outcome
 			.error(role="alert")
 			.success Felicidades!!! Su pago se Proceso Exitosamente su token es
@@ -46,19 +46,24 @@ export default {
 			formTitular:'',
 			formFecha:'',
 			formCVV:null,
-			listo:false,			
+			listo:false,
+			enviandose:false,	
 		}
 	},
 	methods:{
+		...mapMutations(['changePedidoProcesando','setCartInitialData']),
 		EnviarForm(token){
+			this.changePedidoProcesando(true)
 			const pago = {
 				'stripeToken': token,
 				'carro' : this.getCartNow.id
 			}
 			lovizApiPedidoService.pagoStripe(pago)
-			.then(res =>{	
-  			console.log(res)
-	  	});
+			.then(res =>{
+					this.changePedidoProcesando(false)
+					this.setCartInitialData();
+	  			this.$router.push({name:'gracias', params: { pedido: this.getPedido.numero_pedido }})
+	  		});
 		}
 	},
 	mounted(){
@@ -109,7 +114,7 @@ export default {
 
 		  if (result.token) {
 		    //Comienza mi Codigo para enviar el token a mi server
-		    self.EnviarForm(result.token.id)
+		    self.EnviarForm(result.token.id);
 		  } else if (result.error) {
 		    errorElement.textContent = result.error.message;
 		    errorElement.classList.add('visible');
@@ -137,115 +142,113 @@ export default {
 .stripe{
 	width: 95%;
 	margin: 0 auto;
+	form {
+	  width: 100%;
+	  margin: 20px auto;
+	}
+
+	.group {
+	  background: white;
+	  box-shadow: 0 7px 14px 0 rgba(49,49,93,0.10),
+	              0 3px 6px 0 rgba(0,0,0,0.08);
+	  border-radius: 4px;
+	  margin-bottom: 20px;
+	}
+
+	label {
+	  position: relative;
+	  color: #8898AA;
+	  font-weight: 300;
+	  height: 40px;
+	  line-height: 40px;
+	  margin-left: 20px;
+	  display: block;
+	}
+
+	.group label:not(:last-child) {
+	  border-bottom: 1px solid #F0F5FA;
+	}
+
+	label > span {
+	  width: 20%;
+	  text-align: right;
+	  float: left;
+	}
+
+	.field {
+	  background: transparent;
+	  font-weight: 300;
+	  border: 0;
+	  color: #31325F;
+	  outline: none;
+	  padding-right: 10px;
+	  padding-left: 10px;
+	  cursor: text;
+	  width: 70%;
+	  height: 40px;
+	  float: right;
+	}
+
+	.field::-webkit-input-placeholder { color: #CFD7E0; }
+	.field::-moz-placeholder { color: #CFD7E0; }
+	.field:-ms-input-placeholder { color: #CFD7E0; }
+
+	button {
+	  float: left;
+	  display: block;
+	  background: #666EE8;
+	  color: white;
+	  box-shadow: 0 7px 14px 0 rgba(49,49,93,0.10),
+	              0 3px 6px 0 rgba(0,0,0,0.08);
+	  border-radius: 4px;
+	  border: 0;
+	  margin-top: 20px;
+	  font-size: 15px;
+	  font-weight: 400;
+	  width: 100%;
+	  height: 40px;
+	  line-height: 38px;
+	  outline: none;
+	}
+
+	button:focus {
+	  background: #555ABF;
+	}
+
+	button:active {
+	  background: #43458B;
+	}
+
+	.outcome {
+	  float: left;
+	  width: 100%;
+	  padding-top: 8px;
+	  min-height: 24px;
+	  text-align: center;
+	}
+
+	.success, .error {
+	  display: none;
+	  font-size: 13px;
+	}
+
+	.success.visible, .error.visible {
+	  display: inline;
+	}
+
+	.error {
+	  color: #E4584C;
+	}
+
+	.success {
+	  color: #666EE8;
+	}
+
+	.success .token {
+	  font-weight: 500;
+	  font-size: 13px;
+	}
 }
-form {
-  width: 100%;
-  margin: 20px auto;
-}
-
-.group {
-  background: white;
-  box-shadow: 0 7px 14px 0 rgba(49,49,93,0.10),
-              0 3px 6px 0 rgba(0,0,0,0.08);
-  border-radius: 4px;
-  margin-bottom: 20px;
-}
-
-label {
-  position: relative;
-  color: #8898AA;
-  font-weight: 300;
-  height: 40px;
-  line-height: 40px;
-  margin-left: 20px;
-  display: block;
-}
-
-.group label:not(:last-child) {
-  border-bottom: 1px solid #F0F5FA;
-}
-
-label > span {
-  width: 20%;
-  text-align: right;
-  float: left;
-}
-
-.field {
-  background: transparent;
-  font-weight: 300;
-  border: 0;
-  color: #31325F;
-  outline: none;
-  padding-right: 10px;
-  padding-left: 10px;
-  cursor: text;
-  width: 70%;
-  height: 40px;
-  float: right;
-}
-
-.field::-webkit-input-placeholder { color: #CFD7E0; }
-.field::-moz-placeholder { color: #CFD7E0; }
-.field:-ms-input-placeholder { color: #CFD7E0; }
-
-button {
-  float: left;
-  display: block;
-  background: #666EE8;
-  color: white;
-  box-shadow: 0 7px 14px 0 rgba(49,49,93,0.10),
-              0 3px 6px 0 rgba(0,0,0,0.08);
-  border-radius: 4px;
-  border: 0;
-  margin-top: 20px;
-  font-size: 15px;
-  font-weight: 400;
-  width: 100%;
-  height: 40px;
-  line-height: 38px;
-  outline: none;
-}
-
-button:focus {
-  background: #555ABF;
-}
-
-button:active {
-  background: #43458B;
-}
-
-.outcome {
-  float: left;
-  width: 100%;
-  padding-top: 8px;
-  min-height: 24px;
-  text-align: center;
-}
-
-.success, .error {
-  display: none;
-  font-size: 13px;
-}
-
-.success.visible, .error.visible {
-  display: inline;
-}
-
-.error {
-  color: #E4584C;
-}
-
-.success {
-  color: #666EE8;
-}
-
-.success .token {
-  font-weight: 500;
-  font-size: 13px;
-}
-
-
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s

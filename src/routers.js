@@ -3,6 +3,7 @@ import Catalogo from '@/components/paginas/Catalogo.vue'
 import Producto from '@/components/paginas/Producto.vue'
 import UserPage from '@/components/paginas/UserPage.vue'
 import Checkout from '@/components/paginas/Checkout.vue'
+import Gracias from '@/components/paginas/Gracias.vue'
 
 const routes = [
 	{path: '/' ,component: Home, name:'home'},
@@ -10,6 +11,8 @@ const routes = [
 	{path: '/producto/:slug/' ,component: Producto, name:'productoSingle'},
 	{path: '/cuenta/' ,component: UserPage, name:'perfil'},
 	{path: '/checkout/' ,component: Checkout, name:'checkout'},
+	{path: '/felicidades/:pedido/' ,component: Gracias, name:'gracias'},
+
 ]
 
 export default routes

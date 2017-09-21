@@ -66,13 +66,20 @@ export default {
 					this.setPropietarioCart(res.id)
 					//this.$cookie.set('sesion_carro',res.sesion_carro,{ expires: '7d' });					
 					this.buscarCartServerUser();
-					this.$router.push({name:'perfil'});
 				})
 			};			
 		},
+		goToPerfil(){
+			if (!this.getUserLogin.isModal) {
+				if (this.getPerfil.id) {
+					this.$router.push({name:'perfil'});
+				};
+			};
+		}
 	},
 	watch:{
 		'getToken':'getUserPerfil_mt',
+		'getUserLogin.isModal':'goToPerfil'
 	}
 }
 </script>
@@ -122,4 +129,13 @@ export default {
 		}
 	}
 }
+
+//Efectos
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0
+}
+
 </style>

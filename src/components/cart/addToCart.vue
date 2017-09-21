@@ -1,7 +1,7 @@
 <template lang="pug">
 	.add-to-cart
 		a.button.is-black(v-if="!getTallaSeleccionada.id" ,disabled) Selecciona una Talla
-		a.button.is-danger(v-else,@click="addToCart") 
+		a.button.is-success(v-else,@click="addToCart") 
 			.loader(v-if="getCartSpiner")
 			span Agregar al carro
 
@@ -70,19 +70,5 @@ export default {
 		width: 240px;
 		text-transform: uppercase;
 	}
-}
-.loader {
-    border: 3px solid #f3f3f3; /* Light grey */
-    border-top: 3px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    margin: 0 10px;
-    animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 </style>

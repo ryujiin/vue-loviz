@@ -8,6 +8,7 @@ import carts from '@/stores/modules/cartStore'
 import producto from '@/stores/modules/productoStore'
 import pedido from '@/stores/modules/pedidoStore'
 import desing from '@/stores/modules/desing'
+import catalogo from '@/stores/modules/catalogoStore'
 
 Vue.use(VueLocalStorage)
 Vue.use(Vuex)
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
 		producto,
 		pedido,
 		desing,
+		catalogo,
 	}
 })
 

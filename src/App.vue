@@ -5,8 +5,7 @@
     .contenido(:class="{ cartSlideActivo: getCartSlide }")
       .bg_cartSlide(@click="ocultarCartSlide")
       lv-header
-      transition(name="fade" mode="out-in")
-        router-view
+      router-view
       pm-footer  
 </template>
 

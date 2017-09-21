@@ -5,7 +5,7 @@ body{
 	font-family: 'Raleway', sans-serif;
 	font-weight: 400;
 	color: #8a8a8a;
-	background: #E3E2E0;
+	background: #f4f4f4;
 }
 
 a{
@@ -41,11 +41,23 @@ label{
 .text-underline{
 	text-decoration: underline;
 }
-
-//Efectos
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+.modal-content{
+	background: #fff;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0
+.loader {
+    border: 3px solid #f3f3f3; /* Light grey */
+    border-top: 3px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin: 0 10px;
+    animation: spin 2s linear infinite;
+}
+.inline{
+	display: inline-block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

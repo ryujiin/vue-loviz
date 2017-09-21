@@ -1,5 +1,11 @@
 <template lang="pug">
 	.main-content
+		.capa_pagando(v-if="getPedidoDesing.procesando")
+			.pagando
+				.spinner
+					.cube1
+					.cube2
+				p.has-text-black.has-text-centered Procesando Pago
 		.checkout
 			h1.title.has-text-centered Procesar Compra
 			.columns.is-multiline
@@ -51,7 +57,7 @@ export default {
 		LvLineaCart,LvBoxDireccion,LvBoxMetodoEnvio,LvBoxMetodoPago
 	 },
 	computed:{
-		...mapGetters(['getCartNow','getPerfil','getPedido']),
+		...mapGetters(['getCartNow','getPerfil','getPedido','getPedidoDesing']),
 	},
 	methods:{
 		...mapActions(['buscarPedido','updateCart']),
@@ -64,7 +70,9 @@ export default {
 		if (this.getPerfil.id) {
 			if (this.getCartNow.pedido) {
 		    this.buscarPedido(this.getCartNow.pedido);
-		  };	
+		  }else{
+		  	this.updateCart();
+		  }
 		}else{
 	  		this.$router.push({name:'home'})			
 		}	  
@@ -75,7 +83,21 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.capa_pagando{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background-color: rgba(255,255,255,0.95);
+	z-index: 999;
+	top: 0;
+	.pagando{
+		position: absolute;
+		top: 10%;
+		left: 40%;
+		width: 20%;
+	}
+}
 .checkout{
 	width: 1000px;
 	margin: 0 auto;
@@ -125,5 +147,55 @@ export default {
 			opacity: 1;
 		}
 	}
+}
+
+.spinner {
+  margin: 100px auto 20px;
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.cube1, .cube2 {
+  background-color: #3273dc;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  -webkit-animation: sk-cubemove 1.8s infinite ease-in-out;
+  animation: sk-cubemove 1.8s infinite ease-in-out;
+}
+
+.cube2 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+@-webkit-keyframes sk-cubemove {
+  25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) }
+  50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) }
+  75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
+  100% { -webkit-transform: rotate(-360deg) }
+}
+
+@keyframes sk-cubemove {
+  25% { 
+    transform: translateX(42px) rotate(-90deg) scale(0.5);
+    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+  } 50% { 
+    transform: translateX(42px) translateY(42px) rotate(-179deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+  } 50.1% { 
+    transform: translateX(42px) translateY(42px) rotate(-180deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+  } 75% { 
+    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+  } 100% { 
+    transform: rotate(-360deg);
+    -webkit-transform: rotate(-360deg);
+  }
 }
 </style>

@@ -1,9 +1,10 @@
 <template lang="pug">
 .contenido-general.box.direccion
 	.titulo Direccion de Envio
-		.is-pulled-right.aparecer(:class="{'activo' : getPedido.direccion_envio}")
-			button.button.editar.is-ligh Editar
-			span.icon-check.has-text-primary
+		transition(name="fade")
+			.is-pulled-right(v-if ="getPedido.direccion_envio")
+				button.button.editar.is-ligh Editar
+				span.icon-check.has-text-primary
 	.content
 		.formulario(v-if="!getPedido.direccion_envio")
 			p(v-if="hayDirecciones") No tiene Direcciones
@@ -15,7 +16,7 @@
 							|	{{direccion.direccion}}, {{direccion.departamento}}, {{direccion.provincia}}, {{direccion.distrito}}
 			lv-add-direccion
 			.has-text-centered
-				button.button.is-primary.is-medium.aparecer(:class="{'activo' : direccion_envio}" , @click="enviarForm")
+				button.button.is-primary.is-medium(v-if="direccion_envio" , @click="enviarForm")
 					span Siguente 								
 					span.icon-chevron-thin-right
 		.elegido(v-else)

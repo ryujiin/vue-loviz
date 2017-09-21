@@ -1,7 +1,7 @@
 <template lang="pug">
 .contenido-general.box.metodo_envio
 	.titulo Metodo de Envio
-		.is-pulled-right.aparecer(:class="{'activo' : getPedido.metodoenvio}")
+		.is-pulled-right(v-if="getPedido.metodoenvio")
 			button.button.editar.is-ligh Editar
 			span.icon-check.has-text-primary
 	.content
@@ -16,7 +16,7 @@
 						.help {{metodo.descripcion}}
 						.precio S/. {{metodo.precio}}
 			.has-text-centered
-				button.button.is-primary.is-medium.aparecer(:class="{'activo' : formMetodo}" , @click="enviarForm")
+				button.button.is-primary.is-medium(v-if="formMetodo" @click="enviarForm")
 					span Siguente 								
 					span.icon-chevron-thin-right
 		p(v-if="!getPedido.direccion_envio") Tiene que elegir una direccion de envio
