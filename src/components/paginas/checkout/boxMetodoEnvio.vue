@@ -2,14 +2,15 @@
 .contenido-general.box.metodo_envio
 	.titulo Metodo de Envio
 		.is-pulled-right(v-if="getPedido.metodoenvio")
-			button.button.editar.is-ligh Editar
+			button.button.editar.is-ligh(@click="changeEstadoPedido('Envio')") Editar
 			span.icon-check.has-text-primary
 	.content
 		.metodo-elegido(v-if="getPedido.metodoenvio")
 			p {{metodo_envioFormtar}}
-		.metodos(v-if="getPedido.direccion_envio && !getPedido.metodoenvio")
+		.metodos(v-if="getPedido.direccion_envio && !getPedido.metodoenvio || getEstadoPedido=='Envio'")
 			.cajas
-				.caja(v-for="metodo in metodosEnvio" @click="selectMetodo(metodo.id)" :class="{'activo': formMetodo == metodo.id}")
+				.caja(v-for="metodo in metodosEnvio" @click="selectMetodo(metodo.id)" 
+							:class="{'activo': formMetodo == metodo.id}")
 					.icono(:class="[metodo.icono]")
 					.contenido
 						.nombre {{metodo.nombre}}
@@ -20,7 +21,6 @@
 					span Siguente 								
 					span.icon-chevron-thin-right
 		p(v-if="!getPedido.direccion_envio") Tiene que elegir una direccion de envio
-
 </template>
 
 <script>
@@ -39,7 +39,7 @@ export default {
 	 	}
   },
   computed:{
-		...mapGetters(['getPerfil','getPedido']),
+		...mapGetters(['getPerfil','getPedido','getEstadoPedido']),
 		metodo_envioFormtar(){
 			let metodo = ''
 			if (this.metodosEnvio.length==0) {
@@ -58,6 +58,7 @@ export default {
   },
   methods:{
   	...mapActions(['editarPedido']),
+  	...mapMutations(['changeEstadoPedido']),
   	buscar_metodos(){
   		if (this.getPedido.direccion_envio) {
   			lovizApiPedidoService.getMetodoEnvio()

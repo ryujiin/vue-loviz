@@ -14,7 +14,8 @@ const state = {
 	},
 	login:{
 		isModal:false,
-	}
+	},
+	pedidos:[]
 }
 
 const mutations = {
@@ -40,6 +41,9 @@ const mutations = {
    	},
    	changeLoginModal(state,valor){
    		state.login.isModal=valor
+   	},
+   	addPedidos(state,valor){
+   		state.pedidos=valor
    	}
 }
 
@@ -48,6 +52,7 @@ const getters={
 	getPerfil: state => state.userPerfil,
 	getUserTabs: state => state.pageTabs,
 	getUserLogin: state => state.login,
+	getpedidos: state => state.pedidos,
 }
 
 const actions={
@@ -78,7 +83,12 @@ const actions={
 		})
 		return promise
 	},
-	
+	getPedidosServer(context){
+		lovizApiUserService.getPedidos()
+			.then(res =>{
+				context.commit('addPedidos',res)
+			})
+	}	
 }
 
 export default{

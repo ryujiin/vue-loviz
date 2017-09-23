@@ -12,7 +12,10 @@
 			label
 				span Tarjeta
 				#card-element.field
-		button.button.is-primary(type="submit" :disabled="enviandose") Pagar  S/. {{getCartNow.total}}
+		button.button.is-primary(type="submit" :disabled="enviandose") 
+			span Total a Pagar
+			span.icon-keyboard_arrow_right
+			strong  S/. {{getCartNow.total}}
 		.outcome
 			.error(role="alert")
 			.success Felicidades!!! Su pago se Proceso Exitosamente su token es

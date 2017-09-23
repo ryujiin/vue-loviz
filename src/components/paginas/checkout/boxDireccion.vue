@@ -3,10 +3,10 @@
 	.titulo Direccion de Envio
 		transition(name="fade")
 			.is-pulled-right(v-if ="getPedido.direccion_envio")
-				button.button.editar.is-ligh Editar
+				button.button.editar.is-ligh(@click="changeEstadoPedido('Direccion')") Editar
 				span.icon-check.has-text-primary
 	.content
-		.formulario(v-if="!getPedido.direccion_envio")
+		.formulario(v-if="!getPedido.direccion_envio || getEstadoPedido=='Direccion'")
 			p(v-if="hayDirecciones") No tiene Direcciones
 			.direcciones-elegibles(v-else)
 				.control
@@ -41,7 +41,7 @@ export default {
 	 	}
   },
   computed:{
-		...mapGetters(['getPerfil','getPedido']),  	
+		...mapGetters(['getPerfil','getPedido','getEstadoPedido']),  	
   	hayDirecciones(){
 			if (this.getPerfil.id) {
 				if (this.getPerfil.direcciones.length == 0) {
@@ -66,6 +66,7 @@ export default {
 		}
   },
   methods:{
+  	...mapMutations(['changeEstadoPedido']),
   	...mapActions(['editarPedido']),
   	enviarForm(){
   		const pedido = {

@@ -4,13 +4,10 @@ const lovizApiCartServices = {}
 
 //Url para crear o obtener carrito por primera vez
 lovizApiCartServices.createCart = function (carroObject) {
-	return lovizApiService.post('/api/carro/',{
-		params:carroObject
-	})
+	return lovizApiService.post('/api/carro/',carroObject)
 	.then(res => res.data)
 	.catch(err => err.data);
 }
-
 
 lovizApiCartServices.createCartCookie = function (cookie) {
 	return lovizApiService.get('/api/carro/',{
@@ -24,7 +21,6 @@ lovizApiCartServices.createCartCookie = function (cookie) {
 
 lovizApiCartServices.BuscarCartlogin = function () {
 	const token = localStorage.getItem('token');
-
 	return lovizApiService.get('/api/carro/',{
 		headers:{
 			'Authorization':'JWT '+ token
@@ -57,7 +53,6 @@ lovizApiCartServices.getCartServer = function (id) {
 
 lovizApiCartServices.editarCartServer = function (carroObject) {
 	const token = localStorage.getItem('token');
-	console.log(carroObject)
 	if (!carroObject.propietario) {
 		return
 	};

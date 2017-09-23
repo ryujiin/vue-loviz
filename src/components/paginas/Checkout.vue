@@ -57,7 +57,7 @@ export default {
 		LvLineaCart,LvBoxDireccion,LvBoxMetodoEnvio,LvBoxMetodoPago
 	 },
 	computed:{
-		...mapGetters(['getCartNow','getPerfil','getPedido','getPedidoDesing']),
+		...mapGetters(['getCartNow','getPerfil','getPedido','getPedidoDesing','getEstadoPedido']),
 	},
 	methods:{
 		...mapActions(['buscarPedido','updateCart']),
@@ -65,25 +65,34 @@ export default {
 		activarModalDireccion(){
 			this.direcionModal = true;
 		},
+		sacarPedido(){
+			if (!this.getPedido.id) {
+				console.log('no hay pedido')
+			};
+		}
 	},
 	created(){
-		if (this.getPerfil.id) {
+		if (this.getPerfil.id) {			
 			if (this.getCartNow.pedido) {
-		    this.buscarPedido(this.getCartNow.pedido);
-		  }else{
-		  	this.updateCart();
-		  }
+		    	this.buscarPedido(this.getCartNow.pedido);
+		  	}else{
+		  		this.updateCart();
+		  	}
 		}else{
 	  		this.$router.push({name:'home'})			
 		}	  
 	},
 	watch:{
-		'getPedido':'updateCart'
+		'getPedido':'updateCart',
+		'getCartNow.pedido':'sacarPedido',
 	}
 }
 </script>
 
 <style lang="scss" scoped>
+.main-content{
+	padding-top: 100px;
+}
 .capa_pagando{
 	width: 100%;
 	height: 100%;

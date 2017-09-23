@@ -40,21 +40,38 @@ import lovizApiPedidoService from '@/services/pedido/lovizApiPedido'
 export default {
 	data () {
     return {
-    	pedido:{}
+    	pedido:{},
+    	contador:0
     }
   },
+  computed:{
+  	...mapGetters(['getCartNow'])
+  },
   methods:{
-  	...mapMutations(['assignarPedido']),
+  	...mapMutations(['assignarPedido','setCartInitialData']),
+  	...mapActions(['updateCart']),
   	buscar_pedido(pedido){
   		lovizApiPedidoService.pedidoActual(pedido)
   		.then(res =>{
   			this.pedido = res
   			this.assignarPedido({})
   		})
+  	},
+  	observarCarro(){
+  		this.contador++
+  		console.log(this.contador)
+  		if (this.contador==2) {
+  			if (this.getCartNow.estado=="Abierto") {
+  				this.setCartInitialData();
+  			}
+  		};
   	}
   },
-	mounted(){
-		this.buscar_pedido(this.$route.params.pedido)
+	created(){
+		this.buscar_pedido(this.$route.params.pedido);
+	},
+	watch:{
+		//'getCartNow':'observarCarro'
 	}
 }
 </script>

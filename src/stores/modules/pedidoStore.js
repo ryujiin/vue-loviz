@@ -6,7 +6,8 @@ const state = {
 	},
 	desing:{
 		procesando:false,
-	}
+	},
+	estado:''
 }
 
 const mutations = {
@@ -18,12 +19,16 @@ const mutations = {
 	},
 	changePedidoProcesando(state,valor){
 		state.desing.procesando=valor
+	},
+	changeEstadoPedido(state,valor){
+		state.estado=valor
 	}
 }
 
 const getters={
 	getPedido: state => state.pedido,	
 	getPedidoDesing: state => state.desing,	
+	getEstadoPedido: state => state.estado,
 }
 
 const actions={
@@ -37,7 +42,8 @@ const actions={
 		if (pedido.id == context.state.pedido.id) {
 			lovizApiPedidoService.editarPedido(pedido)
 			.then(res =>{
-	  			context.commit('assignarPedido',res)			
+	  			context.commit('assignarPedido',res)
+	  			context.commit('changeEstadoPedido','')
 			})
 		};
 	}

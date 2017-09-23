@@ -64,7 +64,7 @@ export default {
 					this.$Progress.finish();
 					//Coloco el id de usuario al carro
 					this.setPropietarioCart(res.id)
-					//this.$cookie.set('sesion_carro',res.sesion_carro,{ expires: '7d' });					
+					//this.$cookie.set('sesion_carro',res.sesion_carro,{ expires: '7d' });
 					this.buscarCartServerUser();
 				})
 			};			

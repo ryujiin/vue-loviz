@@ -53,6 +53,16 @@ lovizApiPedidoService.getpagoPaypal = function (pedido) {
 	.then(res => res.data)
 	.catch(err => err.data);	
 }
+//Pago Mercado Pago
+lovizApiPedidoService.getpagoMercadoPago = function (carro) {
+	return lovizApiService.get('/get_mercado_pago/',{
+		params:{
+			carro:carro,
+		}
+	})
+	.then(res => res.data)
+	.catch(err => err.data);	
+}
 
 //Ubigeo
 lovizApiPedidoService.getUbigeoDepartamento = function () {

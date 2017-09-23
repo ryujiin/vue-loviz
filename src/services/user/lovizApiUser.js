@@ -21,6 +21,18 @@ lovizApiUserService.getPerfil = function (token) {
 	.catch(err => err.data)
 }
 
+lovizApiUserService.getPedidos = function () {
+	const token = localStorage.getItem('token');
+
+	return lovizApiService.get('/api/pedidos/',{
+		headers:{
+			'Authorization':'JWT '+token
+		}
+	})
+	.then(res => res.data)
+	.catch(err => err.data)
+}
+
 lovizApiUserService.crearUser = function (cuenta) {
 	return lovizApiService.post('/ajax/crear/',cuenta)
 	.then(res => res.data)

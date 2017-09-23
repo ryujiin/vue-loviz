@@ -52,10 +52,16 @@ export default {
 				}
 			},
 			create_cart(){
-				lovizApiCartServices.createCart()
+				let carroObjet = {}
+				if (this.getPerfil.id) {
+					carroObjet.propietario=this.getPerfil.id
+				};
+				lovizApiCartServices.createCart(carroObjet)
 				.then(res =>{
 					//Coloco el Cookie de la sesion
-					this.$cookie.set('sesion_carro',res.sesion_carro,{ expires: '7d' });
+					if (!res.propietario) {
+						this.$cookie.set('sesion_carro',res.sesion_carro,{ expires: '7d' });
+					};
 					this.assignarCart(res);
 					this.addToCart();
 	  		})				
